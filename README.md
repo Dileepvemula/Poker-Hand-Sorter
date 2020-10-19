@@ -51,3 +51,5 @@ Assumptions:
     
     Here, both players have a pair of 3, and one each of 2, 4, 9 cards. 
     Since all hands are same, no player is declared winner.
+3. Cards in order : 2 3 4 5 6 7 8 9 T J Q K A
+4. Suits of cards does not affect in deciding high card
