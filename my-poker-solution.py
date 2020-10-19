@@ -2,6 +2,11 @@ import fileinput
 
 
 def check_increasing(numbers):
+    '''
+
+    :param numbers:
+    :return:
+    '''
     numbers.sort()
     for i in range(1, 5):
         if numbers[i] != numbers[0] + i:
@@ -13,6 +18,11 @@ def check_increasing(numbers):
 
 
 def convert_numbers_to_list(numbers):
+    '''
+
+    :param numbers:
+    :return:
+    '''
     ret = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     for item in numbers:
         ret[item - 2] += 1
@@ -22,6 +32,11 @@ def convert_numbers_to_list(numbers):
 
 
 def create_num_suite(cards):
+    '''
+
+    :param cards:
+    :return:
+    '''
     number = []
     suite = []
     for card in cards:
@@ -42,6 +57,11 @@ def create_num_suite(cards):
 
 
 def rank(cards):
+    '''
+
+    :param cards:
+    :return:
+    '''
     number, suite = create_num_suite(cards)
     suite_set = set(suite)
     # Same Suite
@@ -77,6 +97,11 @@ def rank(cards):
 
 
 def get_pair(number):
+    '''
+
+    :param number:
+    :return:
+    '''
     for j in range(len(number) - 1):
         for i in range(j + 1, len(number)):
             if number[j] == number[i]:
@@ -84,6 +109,11 @@ def get_pair(number):
 
 
 def get_2_pair(number):
+    '''
+
+    :param number:
+    :return:
+    '''
     pair1 = get_pair(number)
     number = list(filter(lambda item: item != pair1, number))
     pair2 = get_pair(number)
@@ -92,6 +122,11 @@ def get_2_pair(number):
 
 # only used for cases like 22233 or 22234 (with 1 triplet)
 def get_triplet(number):
+    '''
+
+    :param number:
+    :return:
+    '''
     ret = get_pair(number)
     number.remove(ret)
     number.remove(ret)
@@ -102,6 +137,13 @@ def get_triplet(number):
 
 
 def high_pair(cards1, cards2, eq_rank):
+    '''
+
+    :param cards1:
+    :param cards2:
+    :param eq_rank:
+    :return:
+    '''
     # 8,7,4,3,2
     number1, suite1 = create_num_suite(cards1)
     number2, suite2 = create_num_suite(cards2)
@@ -169,20 +211,36 @@ def high_pair(cards1, cards2, eq_rank):
 
 
 def high_card(number1, number2, eq_rank):
+    '''
+
+    :param number1:
+    :param number2:
+    :param eq_rank:
+    :return:
+    '''
     # 9,6,5,1
-    max1 = max(number1)
-    max2 = max(number2)
-    if max1 > max2:
-        return 1
-    elif max1 < max2:
-        return 2
+    if number1 and number2:
+        max1 = max(number1)
+        max2 = max(number2)
+        if max1 > max2:
+            return 1
+        elif max1 < max2:
+            return 2
+        else:
+            number1.remove(max1)
+            number2.remove(max1)
+            return high_card(number1, number2, eq_rank)
     else:
-        number1.remove(max1)
-        number2.remove(max1)
-        return high_card(number1, number2, eq_rank)
+        return 0
 
 
 def decide_winner(cards1, cards2):
+    '''
+
+    :param cards1:
+    :param cards2:
+    :return:
+    '''
     rank1 = rank(cards1)
     rank2 = rank(cards2)
     if rank1 > rank2:
@@ -195,6 +253,8 @@ def decide_winner(cards1, cards2):
         return high_card(number1, number2, rank1)
     elif rank1 in [2, 3, 4, 7, 8]:
         return high_pair(cards1, cards2, rank1)
+    else:
+        return 0
 
 
 if __name__ == '__main__':
@@ -207,7 +267,7 @@ if __name__ == '__main__':
         winner = decide_winner(player1_cards, player2_cards)
         if winner == 1:
             count1 += 1
-        else:
+        elif winner == 2:
             count2 += 1
     print("Player 1:", count1)
     print("Player 2:", count2)
